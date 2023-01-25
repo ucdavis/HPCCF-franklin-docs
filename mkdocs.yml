@@ -1,0 +1,26 @@
+site_name: Franklin Cluster Documentation
+site_url: http://docs.franklin.hpc.ucdavis.edu
+nav:
+  - Home: index.md
+  - Users:
+    - General:
+      - Accessing the Cluster: access.md
+      - User Environment: environment.md
+      - Available Resources: resources.md
+      - Data Storage: storage.md
+    - Scheduler:
+      - Slurm: slurm.md
+    - Software:
+      - Modules: modules.md
+      - Python and Conda: conda.md
+      - R: rlang.md
+      - Relion: relion.md
+  - Admins:
+    - Storage: admin_storage.md
+    - Networking: admin_networking.md
+    - Scheduler: admin_scheduler.md
+markdown_extensions:
+    - toc:
+        permalink: true
+theme:
+  name: readthedocs
