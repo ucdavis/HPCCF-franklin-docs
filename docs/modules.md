@@ -28,8 +28,11 @@ Franklin currently uses `lmod`, which is cross-compatible with `envmod`.
 ## Usage
 
 The `module` command is the entry point for users to manage modules in their environment.
-All module operations will be of the form `module [SUBCOMMAND]`, which we will go over in the
-following sections.
+All module operations will be of the form `module [SUBCOMMAND]`. Usage information is available
+on the cluster by running `module --help`.
+
+The basic commands are: `module load [MODULENAME]` to load a module into your environment; `module unload [MODULENAME]` to remove that module; `module avail` to see modules available for loading; and `module list` to see which modules are currently loaded.
+We will go over these commands, and some additional commands, in the following sections.
 
 ### Listing
 
@@ -74,6 +77,70 @@ To see all **possible** modules, use the [`module spider`](modules.md#module-spi
 
 #### `module spider`
 
+Lists **all possible** modules that could be loaded. Some modules require a specific
+compiler version to be loaded, and these modules will not be listed in `module avail`
+unless that module is loaded. Module spider will list these modules anyway.
+If you run the command with a specific module, it will list the prerequisite modules
+required to make said module available. For example, if we try to run:
+
+```bash
+$ module load megahit
+
+Lmod has detected the following error:  These module(s) or extension(s) exist but cannot be loaded as requested: "megahit"
+   Try: "module spider megahit" to see how to load the module(s).
+```
+
+...the load fails. If we then use `spider`:
+
+```bash
+$ module spider megahit                                                  130 ↵
+
+-----------------------------------------------------------------------------
+  megahit: megahit/1.1.4
+-----------------------------------------------------------------------------
+
+    You will need to load all module(s) on any one of the lines below before the "megahit/1.1.4" module is available to load.
+
+      gcc/4.9.4
+ 
+    Help:
+      MEGAHIT: An ultra-fast single-node solution for large and complex
+      metagenomics assembly via succinct de Bruijn graph
+```
+
+...we see that we have to first load `gcc/4.9.4`. Let's do that:
+
+```bash
+$ module load gcc/4.9.4
+gcc/4.9.4: loaded.
+
+$ module avail
+
+-------------------- /share/apps/spack/modulefiles/gcc/4.9.4 --------------------
+   megahit/1.1.4
+
+----------------------- /share/apps/franklin/modulefiles ------------------------
+   conda/base/4.X                conda/cryolo/1.8.4-cuda-11 (D)
+   conda/cryolo/1.8.4-cuda-10    conda/rockstar/0.1
+
+---------------------- /share/apps/spack/modulefiles/Core -----------------------
+   StdEnv                    (L)    libevent/2.1.12        (L)
+   abyss/2.3.1                      mash/2.3
+```
+
+We are now presented with a new section for those modules that require `gcc/4.9.4`,
+with the `megahit` module listed there. Now, we can load it:
+
+```bash
+$ module load megahit
+
+megahit/1.1.4: loaded.
+```
+
+Running `module spider` without any arguments will list all the modules that could be loaded,
+unlike `module avail`, which will list only the modules available for load given any currently-loaded
+prerequisites.
+
 #### `module list`
 
 Lists the modules **currently loaded** in the user environment. By default, the output should be
@@ -117,7 +184,45 @@ blat           (1)   iq-tree          (1)   patchelf      (1)
 
 #### `module load`
 
-This loads the requested module into the active environment. 
+This **loads** the requested module into the active environment.
+Loading a module can edit environment variables, such as prepending directories to `$PATH` so that
+the executables within can be run, set and unset new or existing environment variables, define shell functions,
+and generally, modify your user environment arbitrarily.
+The modifications it makes are tracked, so that when the module is eventually unloaded, any changes can be returned
+to their former state.
+
+Let's load a module.
+
+```bash
+$ module load bwa/0.7.17
+bwa/0.7.17: loaded.
+```
+
+Now, you have access to the `bwa` executable. If you try to run `bwa mem`, you'll get its help output.
+This also sets the appopriate variables so that you can now run `man bwa` to view its manpage.
+
+Note that some modules have multiple versions. Running `module load [MODULENAME]` without specifying a version
+will load the latest version, unless a default has been specified.
+When there are multiple versions, a `(D)` will be printed next to the default version when using [`module avail`](modules.md#module-avail).
+
+Some modules are nested under a deeper hierarchy. For example, `relion` has six variants, two under `relion/cpu` and four under `relion/gpu`.
+To load these, you must specify the second layer of hierarchy: `module load relion` will fail, but `module load relion/cpu` will load the default module under `relion/cpu`, which has the full name `relion/cpu/4.0.0+amd`.
+More information on this system can be found under [Organization](modules.md#organization).
+
+The modules on Franklin are all configured to set a `$NAME_ROOT` variable that points to the installation prefix.
+This will correspond to the name of the module, minus the version. For example:
+
+```bash
+$  ls -R $BWA_ROOT
+/share/apps/spack/spack-v0.19/opt/spack/linux-ubuntu22.04-x86_64_v3/gcc-9.5.0/bwa-0.7.17-3ogkbh2ixha52dxps2letankhc2dbeax:
+bin  doc  man
+
+...
+```
+
+Usually, this will be a very long pathname, as most software on the cluster is managed via the
+[spack](https://spack.readthedocs.io/en/latest/) build system.
+This would be most useful if you're [developing software](developing.md) on the cluster.
 
 ### Searching
 
