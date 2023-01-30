@@ -15,6 +15,7 @@ nav:
       - Python and Conda: conda.md
       - R: rlang.md
       - Relion: relion.md
+      - Developing Software: developing.md
   - Admins:
     - Storage: admin_storage.md
     - Networking: admin_networking.md

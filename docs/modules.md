@@ -48,27 +48,21 @@ $ module avail
    conda/cryolo/1.8.4-cuda-10    conda/rockstar/0.1
 
 ---------------------- /share/apps/spack/modulefiles/Core -----------------------
-   StdEnv                    (L)    mash/2.3
-   abyss/2.3.1                      masurca/4.0.9
-   amdfftw/3.2+amd                  mcl/14-137
-   aragorn/1.2.38                   meme/5.3.0
-   bedtools2/2.30.0                 metaeuk/6-a5d39d9
-   blast-plus/2.12.0                minced/0.3.2
-   blast2go/5.2.5                   miniasm/2018-3-30
-   blat/35                          minimap2/2.14
-   bowtie/1.3.0                     mirdeep2/0.0.8
-   bowtie2/2.4.2                    mmseqs2/14-7e284
-   bwa/0.7.17                       mothur/1.48.0
-   bwtool/1.0                       motioncor2/1.5.0
-   canu/2.2                         mummer/3.23
-   cap3/2015-02-11                  mummer4/4.0.0rc1
-   clustal-omega/1.2.4              muscle/3.8.1551
-   clustalw/2.1                     ncbi-rmblastn/2.11.0
-   corset/1.09                      ncbi-toolkit/26_0_1
+...
+   gatk/3.8.1                         pmix/4.1.2             (L)
+   gatk/4.2.6.1              (D)      prokka/1.14.6
+   gcc/4.9.4                 (L)      raxml-ng/1.0.2
+   gcc/5.5.0                          ray/2.3.1
+   gcc/7.5.0                 (D)      recon/1.05
+   gctf/1.06                 (L)      relion-helper/0.1
+   genrich/0.6                        relion-helper/0.2      (L,D)
+...
 ```
 
 Each entry corresponds to software available for [load](modules.md#loading-and-unloading).
-Each section is a different directory of module files; this is largely unimportant for end users.
+Different sections will appear depending on loaded prerequisites, which you can read about under [`module spider`](modules.md#module-spider).
+Where there are multiple versions or variants of a module, a `(D)` will be listed next to the name of the default version.
+An `(L)` indicates that module is currently loaded.
 
 Note that this does not necessarily list every possible module on the system.
 Some software is compiled with a specific compiler and compiler version, and the relevant compiler
@@ -224,6 +218,31 @@ Usually, this will be a very long pathname, as most software on the cluster is m
 [spack](https://spack.readthedocs.io/en/latest/) build system.
 This would be most useful if you're [developing software](developing.md) on the cluster.
 
-### Searching
-
 ## Organization
+
+Many modules correspond to different versions of the same software, and some software has multiple variants of the same version.
+The default naming convention is `NAME/VERSION`: for example, `cuda/11.8.0` or `mcl/14-137`.
+The version can be omitted when loading, in which case the highest-versioned module or the version marked as default (with a `(D)`) will be used.
+
+### Variants
+
+Some module names are structured as `NAME/VARIANT/VERSION`.
+For these, the minimum name you can use for loading is `NAME/VARIANT`: for example, you can load `relion/gpu` or `relion/cpu`, but just trying to `module load relion` will fail.
+
+### Architectures
+
+Software is sometimes compiled with optimizations specific to certain hardware.
+These are named with the format `NAME/VERSION+ARCH` or `NAME/VARIANT/VERSION+arch`.
+For example, `ctffind/4.1.14+amd` was compiled with AMD Zen2-specific optimizations and uses the [`amdfftw`](https://github.com/amd/amd-fftw) implementation of the [`FFTW`](https://www.fftw.org/) library, and will fail on the Intel-based RTX2080 nodes purchased by the Al-Bassam lab (`gpu-9-[10,18,26]`).
+Conversely, `ctffind/4.1.14+intel` was compiled with Intel-specific compiler optimizations as well as linking against the [Intel OneAPI MKL](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/api-based-programming/intel-oneapi-math-kernel-library-onemkl.html) implementation of `FFTW`, and is only meant to be used on those nodes.
+In all cases, the `+amd` variant of a module, if it exists, is the default, as the majority of the nodes use AMD CPUs.
+
+Software without a `+ARCH` was compiled for a generic architecture and will function on all nodes.
+The generic architecture on Franklin is [`x86-64-v3`](https://lists.llvm.org/pipermail/llvm-dev/2020-July/143289.html), which means they support `AVX`, `AVX2`, and all other previous `SSE` and other vectorized instructions.
+
+### Conda Environments
+
+The various conda modules have their own naming scheme.
+These are of the form `conda/ENVIRONMENT/VERSION`.
+The `conda/base/VERSION` module(s) load the base conda environment and set the appropriate variables to use the `conda activate` and `deactivate` commands, while the the modules for the other environments first load `conda/base` and then activate the environment to which they correspond.
+The the [`conda`](conda.md) section for more information on `conda` and Python on Franklin.
