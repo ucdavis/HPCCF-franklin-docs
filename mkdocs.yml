@@ -8,8 +8,7 @@ nav:
       - User Environment: environment.md
       - Available Resources: resources.md
       - Data Storage: storage.md
-    - Scheduler:
-      - Slurm: slurm.md
+    - Scheduler: slurm.md
     - Software:
       - Modules: modules.md
       - Python and Conda: conda.md
@@ -23,5 +22,7 @@ nav:
 markdown_extensions:
     - toc:
         permalink: true
+    - def_list
+    - admonition
 theme:
   name: readthedocs
