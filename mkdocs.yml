@@ -13,7 +13,7 @@ nav:
       - Modules: modules.md
       - Python and Conda: conda.md
       - R: rlang.md
-      - Relion: relion.md
+      - cryo-EM: cryoem.md
       - Developing Software: developing.md
   - Admins:
     - Storage: admin_storage.md

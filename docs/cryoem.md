@@ -1,19 +1,34 @@
-# Relion
+# Cryo-EM Software Stack
 
-## Using the GUI
+## Relion
 
-### X11 Forwarding
+Franklin has multiple CPU and GPU optimized versions of the [Relion](https://relion.readthedocs.io/en/release-4.0/index.html) cryo-EM structural determination package.
+The head node has been configured to support X11 forwarding, enabling the Relion GUI to be launched.
+Relion jobs are submitted for batch processing on the cluster node via Slurm.
+Each Relion module exports the necessary configurations to pre-fill job submission and dependency information in the GUI, and we have defined additional GUI fields to further configure Slurm parameters.
+We are also maintaining an additional software package, [`relion-helper`](https://github.com/ucdavis/relion-helper), to assist users in switching between Relion modules within the same project.
+
+Your first step is deciding which Relion variant you should use.
+We recommend version **4.0.0**, as it is the currently-supported stable release.
+There are three variants of this version: `relion/cpu/4.0.0+amd`, `relion/gpu/4.0.0+amd`, and `relion/gpu/4.0.0+intel`, which correspond to the CPU optimized, GPU with AMD CPU optimized, and GPU with Intel CPU optimized builds, respectively.
+More information about these modules is available in the [Module Variants](cryoem.md#module-variants) section.
+In general, unless you have access to the three GPU nodes owned by the Al-Bassam lab, you can ignore the Intel variants, and use the CPU `+amd` version for multi-node CPU only jobs and the GPU `+amd` version if you have access to a GPU node.
+
+Because Relion is GUI driven, you need to `ssh` to Franklin with X11 forwarding enabled.
+Instructions for enabling X11 forwarding can be found in the [Access](access.md#x11-forwarding) section.
 
 ### Slurm Configuration
 
-## Module Variants
+### Switching Between Relion Modules: relion-helper
+
+### Module Variants
 
 There are currently six variations of Relion available on Franklin.
 Versions **3.1.3** and **4.0.0** are available, each with:
 
-- A CPU-optimized build compiled for AMD processors
-- A GPU-optimized build compiled for AMD processors
-- A GPU-optimized build compiled for Intel processors
+- A CPU-optimized build compiled for AMD processors: `relion/cpu/[VERSION]+amd`
+- A GPU-optimized build compiled for AMD processors: `relion/gpu/[VERSION]+amd`
+- A GPU-optimized build compiled for Intel processors: `relion/gpu/[VERSION]+intel`
 
 The CPU-optimized builds were configured with `-DALTCPU=True` and without CUDA support.
 For Relion CPU jobs, they will be much faster than the GPU variants.
@@ -21,6 +36,7 @@ The AMD-optimized `+amd` variants were compiled with `-DAMDFFTW=ON` and linked a
 The `+intel` variants were compiled with AVX2 support and configured with the `-DMKLFFT=True` flag, so they use the [Intel OneAPI MKL](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/api-based-programming/intel-oneapi-math-kernel-library-onemkl.html) implementation of `FFTW`.
 All the GPU variants are targeted to a CUDA compute version of 7.5.
 The full Cryo-EM software stack is defined in the HPCCF [spack configuration repository](https://github.com/ucdavis/spack-ucdavis/blob/main/environments/hpccf/franklin/cryoem/spack.yaml), and we maintain our own [Relion spack package definition](https://github.com/ucdavis/spack-ucdavis/blob/main/repos/hpccf/packages/relion/package.py).
+More information on the configurations described here can be found in [the Relion docs](https://relion.readthedocs.io/en/release-4.0/Installation.html#configuration-options).
 
 The different modules may need to be used with different Slurm resource directives, depending on their variants.
 The necessary directives, given a module and job partition, are as follows:
@@ -45,12 +61,11 @@ Those with access to and submitting to the `mmgdept-gpu` queue would need only t
     If you wish to submit jobs manually, you can get the path to Slurm submission template for the currently-loaded module from the `$RELION_QSUB_TEMPLATE`
     environment variable; copying this template is a good starting place for building your batch scripts.
 
-## Related Software
 
-### ctffind
+## ctffind
 
-### MotionCor2
+## MotionCor2
 
-### Gctf
+## Gctf
 
-### relion-helper
+## relion-helper
