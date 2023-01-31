@@ -14,8 +14,41 @@ There are three variants of this version: `relion/cpu/4.0.0+amd`, `relion/gpu/4.
 More information about these modules is available in the [Module Variants](cryoem.md#module-variants) section.
 In general, unless you have access to the three GPU nodes owned by the Al-Bassam lab, you can ignore the Intel variants, and use the CPU `+amd` version for multi-node CPU only jobs and the GPU `+amd` version if you have access to a GPU node.
 
-Because Relion is GUI driven, you need to `ssh` to Franklin with X11 forwarding enabled.
-Instructions for enabling X11 forwarding can be found in the [Access](access.md#x11-forwarding) section.
+!!! Note
+    Because Relion is GUI driven, you need to `ssh` to Franklin with X11 forwarding enabled.
+    Instructions for enabling X11 forwarding can be found in the [Access](access.md#x11-forwarding) section.
+
+### Launching Relion
+
+Make sure you have loaded one of the Relion modules:
+
+```bash
+$ module list relion
+
+Currently Loaded Modules Matching: relion
+  1) relion/gpu/4.0.0+amd   2) relion-helper/0.2
+```
+
+Change your working directory your Relion project directory and type `relion`.
+The Relion GUI should then pop up locally.
+There will be a bit of latency when using it, especially if you are off campus.
+You may be able to reduce latency by [enabling SSH compression](access.md#x11-forwarding).
+
+![The Relion start screen.](img/relion_start_gui.png)
+
+If you are completely unfamiliar with Relion, you should start with the [tutorial](https://relion.readthedocs.io/en/release-4.0/SPA_tutorial/index.html).
+
+### Dependency Configuration
+
+The paths to software that different Relion jobs use will be *automatically filled in*.
+Editing these paths, unless you really, *really* know what you are doing, is **not** recommended and will likely result in problems, as some of these
+dependencies are compiled with architecture-specific flags that match their Relion variant.
+
+![Pre-filled dependent program path.](img/relion_dep_gui.png)
+
+!!! danger
+    If you plan to switch between Relion modules within the same project, **you must [use the procedure described in the relion-helper section](cryoem.md#switching-between-relion-modules-relion-helper)**.
+    Failure to do so **will** result in execution errors.
 
 ### Slurm Configuration
 
@@ -57,7 +90,7 @@ Alternatively, if you were using an AMD-optimized GPU version, like `relion/gpu/
 Those with access to and submitting to the `mmgdept-gpu` queue would need only to specify `--gres=gpu:2`, as that partition only has AMD nodes in it.
 
 !!! NOTE
-    If you are submitting jobs via the [GUI](relion.md#using-the-gui), these Slurm directives will already be taken care of for you.
+    If you are submitting jobs via the GUI, these Slurm directives will already be taken care of for you.
     If you wish to submit jobs manually, you can get the path to Slurm submission template for the currently-loaded module from the `$RELION_QSUB_TEMPLATE`
     environment variable; copying this template is a good starting place for building your batch scripts.
 
