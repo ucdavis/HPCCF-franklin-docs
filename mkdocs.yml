@@ -1,5 +1,5 @@
 site_name: Franklin Cluster Documentation
-site_url: http://docs.franklin.hpc.ucdavis.edu
+site_url: https://docs.franklin.hpc.ucdavis.edu
 nav:
   - Home: index.md
   - Users:
@@ -24,5 +24,7 @@ markdown_extensions:
         permalink: true
     - def_list
     - admonition
+plugins:
+  - search
 theme:
   name: readthedocs
