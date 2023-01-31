@@ -1,5 +1,5 @@
 site_name: Franklin Cluster Documentation
-site_url: https://docs.franklin.hpc.ucdavis.edu
+site_url: http://docs.franklin.hpc.ucdavis.edu
 nav:
   - Home: index.md
   - Users:
