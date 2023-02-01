@@ -10,7 +10,11 @@ nav:
       - User Environment: environment.md
       - Available Resources: resources.md
       - Data Storage: storage.md
-    - Scheduler: slurm.md
+    - Scheduler:
+      - scheduler/index.md
+      - Queueing: scheduler/queues.md
+      - Jobs: scheduler/jobs.md
+      - Cluster Status: scheduler/status.md
     - Software:
       - Modules: modules.md
       - Python and Conda: conda.md
@@ -48,6 +52,7 @@ theme:
     #- navigation.tabs
     - navigation.sections
     - navigation.expand
+    - navigation.indexes
     - navigation.top
     - navigation.footer
     - navigation.tracking
