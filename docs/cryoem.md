@@ -44,7 +44,10 @@ The paths to software that different Relion jobs use will be *automatically fill
 Editing these paths, unless you really, *really* know what you are doing, is **not** recommended and will likely result in problems, as some of these
 dependencies are compiled with architecture-specific flags that match their Relion variant.
 
-![Pre-filled dependent program path.](img/relion_dep_gui.png)
+<figure markdown>
+  ![dependent program.](img/relion_dep_gui.png)
+  <figcaption>Pre-filled dependent program path.</figcaption>
+</figure>
 
 !!! danger
     If you plan to switch between Relion modules within the same project, **you must [use the procedure described in the relion-helper section](cryoem.md#switching-between-relion-modules-relion-helper)**.
@@ -84,7 +87,7 @@ The necessary directives, given a module and job partition, are as follows:
 `relion/gpu/[3.1.3,4.0.0]+intel` | `low`            | `--constraint=intel --gres=gpu:[$N_GPUs]` or `--gres=gpu:[rtx_2080_ti]:[$N_GPUs]`
 `relion/gpu/[3.1.3,4.0.0]+intel` | `jawdatgrp-gpu`  | `--gres=gpu:[$N_GPUs]`
 
-For example, to use the CPU-optimized Relion module `relion/cpu/4.0.0+amd` on the free, preemptable `low` partition, you should submit jobs with `--constrait=amd` so as to eliminate the Intel nodes in that partition from consideration.
+For example, to use the CPU-optimized Relion module `relion/cpu/4.0.0+amd` on the free, preemptable `low` partition, you should submit jobs with `--constraint=amd` so as to eliminate the Intel nodes in that partition from consideration.
 However, if you have access to and are using the `high` partition with the same module, no additional Slurm directives are required, as the `high` partition only has CPU compute nodes.
 Alternatively, if you were using an AMD-optimized GPU version, like `relion/gpu/4.0.0+amd`, and wished to use 2 GPUs on the `low` partition, you would need to provide both the `--constraint=amd` and a `--gres=gpu:2` directive, in order to get an AMD node on the partition along with the required GPUs.
 Those with access to and submitting to the `mmgdept-gpu` queue would need only to specify `--gres=gpu:2`, as that partition only has AMD nodes in it.
