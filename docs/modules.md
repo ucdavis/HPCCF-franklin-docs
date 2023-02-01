@@ -93,7 +93,8 @@ $ module spider megahit
   megahit: megahit/1.1.4
 -----------------------------------------------------------------------------
 
-    You will need to load all module(s) on any one of the lines below before the "megahit/1.1.4" module is available to load.
+    You will need to load all module(s) on any one of the lines below before
+    the "megahit/1.1.4" module is available to load.
 
       gcc/4.9.4
  
