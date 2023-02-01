@@ -6,21 +6,24 @@ nav:
   - About: index.md
   - Users:
     - General:
-      - Accessing the Cluster: access.md
-      - User Environment: environment.md
-      - Available Resources: resources.md
-      - Data Storage: storage.md
+      - general/index.md
+      - Accessing the Cluster: general/access.md
+      - User Environment: general/environment.md
+      - Available Resources: general/resources.md
+      - Data Storage: general/storage.md
     - Scheduler:
       - scheduler/index.md
       - Queueing: scheduler/queues.md
       - Jobs: scheduler/jobs.md
       - Cluster Status: scheduler/status.md
     - Software:
-      - Modules: modules.md
-      - Python and Conda: conda.md
-      - R and RStudio: rlang.md
-      - cryo-EM: cryoem.md
-      - Developing Software: developing.md
+      - software/index.md
+      - Software List: software/list.md
+      - Module System: software/modules.md
+      - Python and Conda: software/conda.md
+      - R and RStudio: software/rlang.md
+      - cryo-EM: software/cryoem.md
+      - Developing Software: software/developing.md
   - Admins:
     - Storage: admin_storage.md
     - Networking: admin_networking.md
@@ -44,6 +47,10 @@ plugins:
   - search
   - git-revision-date-localized:
       enable_creation_date: true
+  - macros:
+        module_name: macros
+extra:
+  spack_modulefiles_path: ../spack-ucdavis/modulefiles/hpccf/franklin/
 extra_css:
   - stylesheets/extra.css
 theme:

@@ -16,7 +16,7 @@ In general, unless you have access to the three GPU nodes owned by the Al-Bassam
 
 !!! Note
     Because Relion is GUI driven, you need to `ssh` to Franklin with X11 forwarding enabled.
-    Instructions for enabling X11 forwarding can be found in the [Access](access.md#x11-forwarding) section.
+    Instructions for enabling X11 forwarding can be found in the [Access](../general/access.md#x11-forwarding) section.
 
 ### Launching Relion
 
@@ -32,10 +32,10 @@ Currently Loaded Modules Matching: relion
 Change your working directory your Relion project directory and type `relion`.
 The Relion GUI should then pop up locally.
 There will be a bit of latency when using it, especially if you are off campus.
-You may be able to reduce latency by [enabling SSH compression](access.md#x11-forwarding).
+You may be able to reduce latency by [enabling SSH compression](../general/access.md#x11-forwarding).
 
 <figure markdown>
-  ![The Relion start screen.](img/relion_start_gui.png)
+  ![The Relion start screen.](../img/relion_start_gui.png)
   <figcaption>The relion start screen.</figcaption>
 </figure>
 
@@ -48,7 +48,7 @@ Editing these paths, unless you really, *really* know what you are doing, is **n
 dependencies are compiled with architecture-specific flags that match their Relion variant.
 
 <figure markdown>
-  ![dependent program.](img/relion_dep_gui.png)
+  ![dependent program.](../img/relion_dep_gui.png)
   <figcaption>Pre-filled dependent program path.</figcaption>
 </figure>
 

@@ -9,7 +9,7 @@ summary: An overview of the software module system and how to use it.
 
 High performance compute clusters usually have a variety of software with sometimes conflicting
 dependencies.
-Software packages may need to make modifications to the [user environment](shells-ref), or the same
+Software packages may need to make modifications to the [user environment](../general/environment.md), or the same
 software may be compiled multiple times to run efficiently on differing hardware within the cluster.
 To support these use cases, software is managed with a module system that prepares the user
 environment to access specific software on load and returns the environment to its former state when
@@ -18,7 +18,7 @@ A _module_ is the bit of code that enacts and tracks these changes to the user e
 module _system_ is software that runs these modules and the collection of modules it is aware of.
 Most often, a module is associated with a specific software package at a specific version, but they
 can also be used to make more general changes to a user environment; for example, a module could
-load a set of configurations for the [BASH](shells-ref) shell that set color themes.
+load a set of configurations for the [BASH](https://www.gnu.org/software/bash/) shell that set color themes.
 
 The two most commonly deployed module systems are [environment
 modules](https://modules.readthedocs.io/en/latest/) (or `envmod`) and
