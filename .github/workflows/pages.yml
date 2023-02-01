@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Docs
         uses: actions/checkout@v3
         with:
-          path: main
+          path: docs
       - name: Checkout spack-ucdavis
         uses: actions/checkout@v3
         with:
@@ -27,5 +27,7 @@ jobs:
           key: ${{ github.ref }}
           path: .cache
       - run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-macros-plugin
-      - run: mkdocs gh-deploy --force
+      - name: mkdocs deploy
+        working-directory: docs
+        run: mkdocs gh-deploy --force
 
