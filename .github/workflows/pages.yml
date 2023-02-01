@@ -10,10 +10,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - name: Checkout Docs
+        uses: actions/checkout@v3
+        with:
+          path: main
+      - name: Checkout spack-ucdavis
+        uses: actions/checkout@v3
         with:
           repository: ucdavis/spack-ucdavis
+          path: spack-ucdavis
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
