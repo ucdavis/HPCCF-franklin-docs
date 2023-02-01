@@ -1,7 +1,9 @@
 site_name: Franklin Cluster Documentation
 site_url: http://docs.franklin.hpc.ucdavis.edu
+repo_url: https://github.com/ucdavis/HPCCF-franklin-docs
+copyright: Copyright &copy; 2023 The Regents of the University of California, Davis
 nav:
-  - Home: index.md
+  - About: index.md
   - Users:
     - General:
       - Accessing the Cluster: access.md
@@ -12,7 +14,7 @@ nav:
     - Software:
       - Modules: modules.md
       - Python and Conda: conda.md
-      - R: rlang.md
+      - R and RStudio: rlang.md
       - cryo-EM: cryoem.md
       - Developing Software: developing.md
   - Admins:
@@ -20,12 +22,51 @@ nav:
     - Networking: admin_networking.md
     - Scheduler: admin_scheduler.md
 markdown_extensions:
-    - toc:
-        permalink: true
-    - def_list
-    - admonition
-    - md_in_html
+  - toc:
+      permalink: true
+  - def_list
+  - attr_list
+  - admonition
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 plugins:
   - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+extra_css:
+  - stylesheets/extra.css
 theme:
-  name: readthedocs
+  name: material
+  features:
+    #- navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+  logo: assets/HPCCF-logo-dark.png
+  icon:
+    repo: fontawesome/brands/github
+  palette: 
+
+    # Palette toggle for light mode
+    - scheme: ucdavis
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
