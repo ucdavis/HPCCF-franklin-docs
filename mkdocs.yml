@@ -24,6 +24,7 @@ markdown_extensions:
         permalink: true
     - def_list
     - admonition
+    - md_in_html
 plugins:
   - search
 theme:
