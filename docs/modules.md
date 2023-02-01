@@ -40,7 +40,7 @@ We will go over these commands, and some additional commands, in the following s
 
 Lists the modules **currently available** to load on the system. Some example output would be:
 
-```bash
+``` console
 $ module avail
 
 ----------------------- /share/apps/franklin/modulefiles ------------------------
@@ -77,7 +77,7 @@ unless that module is loaded. Module spider will list these modules anyway.
 If you run the command with a specific module, it will list the prerequisite modules
 required to make said module available. For example, if we try to run:
 
-```bash
+``` console
 $ module load megahit
 
 Lmod has detected the following error:  These module(s) or extension(s) exist but cannot be loaded as requested: "megahit"
@@ -86,8 +86,8 @@ Lmod has detected the following error:  These module(s) or extension(s) exist bu
 
 ...the load fails. If we then use `spider`:
 
-```bash
-$ module spider megahit                                                  130 ↵
+```console hl_lines="7 8 9"
+$ module spider megahit
 
 -----------------------------------------------------------------------------
   megahit: megahit/1.1.4
@@ -104,7 +104,7 @@ $ module spider megahit                                                  130 ↵
 
 ...we see that we have to first load `gcc/4.9.4`. Let's do that:
 
-```bash
+``` console
 $ module load gcc/4.9.4
 gcc/4.9.4: loaded.
 
@@ -125,7 +125,7 @@ $ module avail
 We are now presented with a new section for those modules that require `gcc/4.9.4`,
 with the `megahit` module listed there. Now, we can load it:
 
-```bash
+```console
 $ module load megahit
 
 megahit/1.1.4: loaded.
@@ -140,7 +140,7 @@ prerequisites.
 Lists the modules **currently loaded** in the user environment. By default, the output should be
 similar to:
 
-```bash
+```console
 $ module list
 
 Currently Loaded Modules:
@@ -157,7 +157,7 @@ It is most useful when the list of modules is very large, and there are multiple
 module available.
 The output is a list of each module name followed by the number of versions of the module.
 
-```bash
+```console
 $ module overview
 
 ----------------------- /share/apps/franklin/modulefiles ------------------------
@@ -187,7 +187,7 @@ to their former state.
 
 Let's load a module.
 
-```bash
+```console
 $ module load bwa/0.7.17
 bwa/0.7.17: loaded.
 ```
@@ -206,7 +206,7 @@ More information on this system can be found under [Organization](modules.md#org
 The modules on Franklin are all configured to set a `$NAME_ROOT` variable that points to the installation prefix.
 This will correspond to the name of the module, minus the version. For example:
 
-```bash
+```console
 $  ls -R $BWA_ROOT
 /share/apps/spack/spack-v0.19/opt/spack/linux-ubuntu22.04-x86_64_v3/gcc-9.5.0/bwa-0.7.17-3ogkbh2ixha52dxps2letankhc2dbeax:
 bin  doc  man
