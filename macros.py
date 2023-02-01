@@ -44,6 +44,7 @@ def render_spack_modules(modules):
         path = list(entry['variants'].values())[-1]
         versions = ', '.join(entry['versions'])
         variants = ', '.join(entry['builds'])
+        modulenames = ', '.join((f'`{name}`' for name in entry['variants'].keys()))
 
         arches = entry['arches']
         if not arches:
@@ -56,9 +57,10 @@ def render_spack_modules(modules):
         
         entries.append(( f'## {software}\n\n'
                          f'{about}\n\n'
-                         f'**Versions**: {versions}\n'
-                         f'{"**Variants**: " if variants else ""}{variants}\n'
-                         f'**Arches**: {arches}\n'))
+                         f'**Versions**: {versions}\n\n'
+                         f'{"**Variants**: " if variants else ""}{variants}\n\n'
+                         f'**Arches**: {arches}\n\n'
+                         f'**Modules**: {modulenames}'))
         
     return '\n'.join(entries)
 
