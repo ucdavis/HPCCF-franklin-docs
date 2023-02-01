@@ -1,4 +1,4 @@
-# Cryo-EM Software Stack
+# :material-microscope: :material-dna: Cryo-EM Software Stack
 
 ## Relion
 
@@ -34,7 +34,10 @@ The Relion GUI should then pop up locally.
 There will be a bit of latency when using it, especially if you are off campus.
 You may be able to reduce latency by [enabling SSH compression](access.md#x11-forwarding).
 
-![The Relion start screen.](img/relion_start_gui.png)
+<figure markdown>
+  ![The Relion start screen.](img/relion_start_gui.png)
+  <figcaption>The relion start screen.</figcaption>
+</figure>
 
 If you are completely unfamiliar with Relion, you should start with the [tutorial](https://relion.readthedocs.io/en/release-4.0/SPA_tutorial/index.html).
 
