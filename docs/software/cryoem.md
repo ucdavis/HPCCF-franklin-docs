@@ -14,6 +14,8 @@ There are three variants of this version: `relion/cpu/4.0.0+amd`, `relion/gpu/4.
 More information about these modules is available in the [Module Variants](cryoem.md#module-variants) section.
 In general, unless you have access to the three GPU nodes owned by the Al-Bassam lab, you can ignore the Intel variants, and use the CPU `+amd` version for multi-node CPU only jobs and the GPU `+amd` version if you have access to a GPU node.
 
+If you are completely unfamiliar with Relion, you should start with the [tutorial](https://relion.readthedocs.io/en/release-4.0/SPA_tutorial/index.html).
+
 !!! Note
     Because Relion is GUI driven, you need to `ssh` to Franklin with X11 forwarding enabled.
     Instructions for enabling X11 forwarding can be found in the [Access](../general/access.md#x11-forwarding) section.
@@ -38,8 +40,6 @@ You may be able to reduce latency by [enabling SSH compression](../general/acces
   ![The Relion start screen.](../img/relion_start_gui.png)
   <figcaption>The relion start screen.</figcaption>
 </figure>
-
-If you are completely unfamiliar with Relion, you should start with the [tutorial](https://relion.readthedocs.io/en/release-4.0/SPA_tutorial/index.html).
 
 ### Dependency Configuration
 
@@ -103,8 +103,18 @@ Those with access to and submitting to the `mmgdept-gpu` queue would need only t
 
 ## ctffind
 
+Our installation of [CTFFIND4](https://grigoriefflab.umassmed.edu/ctffind4) has `+amd` and `+intel` variants
+which, like Relion, are linked against `amdfftw` and Intel OneAPI MKL, respectively.
+The Slurm `--constraint` flags should be used with these as well, when appropriate, as indicated in the Relion directive table.
+Each Relion module has its companion CTFFIND4 module as a dependency, so the appropriate version will automatically be
+loaded when you load Relion, and the proper environment variables are set for the Relion GUI to point at them.
+
 ## MotionCor2
+
+We have deployed [MotionCor2](https://emcore.ucsf.edu/ucsf-software) binaries which have been patched to link against the appropriate version of CUDA.
+These are targetted at a generic architecture, as the source code is not available.
+Like CTFFIND4, this module is brought in by Relion and the proper environment variables set for Relion to use it.
 
 ## Gctf
 
-## relion-helper
+[Gctf](https://pubmed.ncbi.nlm.nih.gov/26592709/) binaries have been patched and deployed in the same manner as MotionCor2.
