@@ -15,6 +15,7 @@ nav:
       - scheduler/index.md
       - Slurm Commands: scheduler/jobs.md
       - Queueing: scheduler/queues.md
+      - Resource Requests: scheduler/resources.md
       - Cluster Status: scheduler/status.md
     - Software:
       - software/index.md
