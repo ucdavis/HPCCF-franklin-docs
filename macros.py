@@ -3,10 +3,12 @@ import pathlib
 import re
 import yaml
 
+
 def parse_spack_index(modulefiles_path):
     with open(os.path.join(modulefiles_path, 'module-index.yaml')) as fp:
         module_index = yaml.load(fp, yaml.SafeLoader)['module_index']
     return module_index
+
 
 def build_module_data(module_index, modulefiles_path):
     modules = {}
@@ -37,6 +39,7 @@ def build_module_data(module_index, modulefiles_path):
             entry['arches'].add(arch)
     
     return modules
+
 
 def render_spack_modules(modules):
     entries = []
