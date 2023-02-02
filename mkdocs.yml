@@ -13,8 +13,8 @@ nav:
       - Data Storage: general/storage.md
     - Scheduler:
       - scheduler/index.md
+      - Slurm Commands: scheduler/jobs.md
       - Queueing: scheduler/queues.md
-      - Jobs: scheduler/jobs.md
       - Cluster Status: scheduler/status.md
     - Software:
       - software/index.md
@@ -35,6 +35,7 @@ markdown_extensions:
   - attr_list
   - admonition
   - md_in_html
+  - pymdownx.details
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
@@ -56,6 +57,7 @@ extra_css:
 theme:
   name: material
   features:
+    - content.code.annotate
     #- navigation.tabs
     - navigation.sections
     - navigation.expand
