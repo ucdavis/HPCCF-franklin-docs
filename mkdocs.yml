@@ -53,6 +53,13 @@ plugins:
         module_name: macros
 extra:
   spack_modulefiles_path: ../spack-ucdavis/modulefiles/hpccf/franklin/
+  social:
+    - icon: material/email-edit
+      link: "mailto:hpc-help@ucdavis.edu"
+      name: Email HPCCF Support
+    - icon: fontawesome/brands/slack
+      link: https://ucdavis.slack.com/archives/C053NKA88
+      name: "#hpc Channel on ucdavis.slack.com"
 extra_css:
   - stylesheets/extra.css
 theme:
