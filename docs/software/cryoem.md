@@ -77,7 +77,7 @@ These new fields are:
 
     <figure markdown>
     ![Relion GUI running screen, GPU version](../img/relion_running_gpu.png)
-    <figcaption>The `relion/gpu` module has an extra field for GPU resources. ALso note the differing submission script.</figcaption>
+    <figcaption>The `relion/gpu` module has an extra field for GPU resources. Also note the differing submission script.</figcaption>
     </figure>
 
 The default GUI fields serve their original purposes:
@@ -89,6 +89,136 @@ The default GUI fields serve their original purposes:
 - **Minimum dedicated cores per node**: Unused on our system.
 
 ### Switching Between Relion Modules: relion-helper
+
+Sometimes, you may wish to use different Relion modules for different tasks while working within the same project -- 
+perhaps you'd prefer to use the CPU-optimized version for CTF estimation and the GPU-optimized version for 3D refinement.
+**This does not work out of the box**.
+Relion fills the filesystem paths of its dependencies and templates from environment variables, and those environment
+variables are set in the [modulefiles](modules.md#intro) of the differing Relion builds.
+However, when a Relion job is run, those paths are cached in hidden `.star` files in the project directory, and
+the *next time* Relion is run, it fills those paths from the cache files instead of the environment variables.
+This means that, after switching modules, the cached location of the *previous* module will be used, instead of the
+exported environment variables from the *new* module.
+**This causes major breakage** due to dependencies having different compilation options to match the parent Relion
+they are attached to and Slurm templates having different configuration options available.
+
+Luckily, we have a solution!
+We wrote and are maintaining [relion-helper](https://github.com/ucdavis/relion-helper), a simple utility that updates
+the cached variables in a project to match whatever Relion module is currently loaded.
+Let's go over example use of the tool.
+
+In this example, assume we have a relion project directory at `/path/to/my/project`.
+We ran some steps with the module `relion/gpu/4.0.0+amd`, and now want to switch to `relion/cpu/4.0.0+amd`.
+First, let's swap modules:
+
+```console
+$ module unload relion/gpu/4.0.0+amd 
+amdfftw/3.2+amd: unloaded.
+ctffind/4.1.14+amd: unloaded.
+relion/gpu/4.0.0+amd: unloaded.
+motioncor2/1.5.0: unloaded.
+gctf/1.06: unloaded.
+ghostscript/9.56.1: unloaded.
+
+$ module load relion/cpu/4.0.0+amd.lua 
+amdfftw/3.2+amd: loaded.
+ctffind/4.1.14+amd: loaded.
+relion/cpu/4.0.0+amd: loaded.
+motioncor2/1.5.0: loaded.
+gctf/1.06: loaded.
+ghostscript/9.56.1: loaded.
+```
+
+And load relion-helper:
+
+```console
+$ module load relion-helper 
+relion-helper/0.2: loaded.
+
+$ relion-helper -h
+usage: relion-helper [-h] {reset-cache} ...
+
+positional arguments:
+  {reset-cache}
+
+options:
+  -h, --help     show this help message and exit
+```
+
+Now, change to the project directory:
+
+```console
+$ cd /path/to/my/project
+```
+
+Then, run the utility. 
+It will pull the updated values from the appropriate environment variables that were exported by the new module
+and write them to the cache files in-place.
+
+```console
+$ relion-helper reset-cache
+> .gui_ctffindjob.star:41:
+  qsub_extra2: 2 => 10000
+> .gui_ctffindjob.star:42:
+  qsub_extra3: 10000 => 12:00:00
+> .gui_ctffindjob.star:43:
+  qsubscript: /share/apps/spack/templates/hpccf/franklin/relion.4.0.0.gpu.zen2.slurm.template.sh => 
+/share/apps/spack/templates/hpccf/franklin/relion.4.0.0.cpu.slurm.template.sh
+> .gui_class2djob.star:53:
+  qsub_extra2: 2 => 10000
+> .gui_class2djob.star:54:
+  qsub_extra3: 10000 => 12:00:00
+> .gui_class2djob.star:55:
+  qsubscript: /share/apps/spack/templates/hpccf/franklin/relion.4.0.0.gpu.zen2.slurm.template.sh => 
+/share/apps/spack/templates/hpccf/franklin/relion.4.0.0.cpu.slurm.template.sh
+> .gui_autopickjob.star:63:
+  qsub_extra2: 2 => 10000
+> .gui_autopickjob.star:64:
+  qsub_extra3: 10000 => 12:00:00
+> .gui_autopickjob.star:65:
+  qsubscript: /share/apps/spack/templates/hpccf/franklin/relion.4.0.0.gpu.zen2.slurm.template.sh => 
+/share/apps/spack/templates/hpccf/franklin/relion.4.0.0.cpu.slurm.template.sh
+> .gui_importjob.star:38:
+  qsub_extra2: 2 => 10000
+...
+```
+
+The above output is truncated for brevity.
+For each cached variable it updates, it reports the name of the cache file, the line number of the change, and the 
+variable name and value of the change.
+You can now launch Relion and continue with your work.
+
+**Each time you want to switch Relion modules for a project**, you will need to run this after loading the new module.
+
+For now, relion-helper only has the `reset-cache` subcommand.
+You can skip `cd`ing to the project directory by passing the project directory to it instead:
+
+```console
+$ relion-helper reset-cache -p /path/to/my/project
+```
+
+Although the changes are made in-place, it leaves backups of the modified files, in case you are concerned about bugs.
+The original files are of the form `.gui_[JOBNAME].star`, and the backups are suffixed with `.bak`:
+
+```console
+$ ls -al /path/to/my/project
+total 317
+drwxrwxr-x 10 camw camw   31 Feb  3 10:02 .
+drwxrwxr-x  4 camw camw    6 Jan 12 12:58 ..
+drwxrwxr-x  5 camw camw    5 Jan 12 12:46 .Nodes
+drwxrwxr-x  2 camw camw    2 Jan 12 12:40 .TMP_runfiles
+-rw-rw-r--  1 camw camw 1959 Feb  3 10:02 .gui_autopickjob.star
+-rw-rw-r--  1 camw camw 1957 Feb  3 10:01 .gui_autopickjob.star.bak
+-rw-rw-r--  1 camw camw 1427 Feb  3 10:02 .gui_class2djob.star
+-rw-rw-r--  1 camw camw 1425 Feb  3 10:01 .gui_class2djob.star.bak
+-rw-rw-r--  1 camw camw 1430 Feb  3 10:02 .gui_ctffindjob.star
+-rw-rw-r--  1 camw camw 1428 Feb  3 10:01 .gui_ctffindjob.star.bak
+...
+```
+
+!!! warning
+
+    We **do not recommend** changing between major Relion versions within the same project: ie, from 3.0.1 to 4.0.0.
 
 ### Module Variants
 
