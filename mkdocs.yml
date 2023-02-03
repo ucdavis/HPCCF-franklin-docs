@@ -15,8 +15,8 @@ nav:
       - scheduler/index.md
       - Slurm Commands: scheduler/jobs.md
       - Queueing: scheduler/queues.md
-      - Resource Requests: scheduler/resources.md
-      - Cluster Status: scheduler/status.md
+      - Resources: scheduler/resources.md
+      - Job Scripts: scheduler/jobscripts.md
     - Software:
       - software/index.md
       - Software List: software/list.md
@@ -45,6 +45,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
 plugins:
   - search
   - git-revision-date-localized:

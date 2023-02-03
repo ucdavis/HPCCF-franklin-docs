@@ -58,6 +58,36 @@ dependencies are compiled with architecture-specific flags that match their Reli
 
 ### Slurm Configuration
 
+Our Relion deployment has additional fields in the **Running** tabs.
+These new fields are:
+
+- **Email**: The email to which Slurm will send job status updates. Fills the `--mail-user` `sbatch`/`srun` parameter.
+- **Memory per CPU**: Fills the Slurm `--memory-per-cpu` parameter. Total RAM use of a job will be *(Number of MPI procs)* \* *(Number of Threads)* \* *(Memory per CPU)*, when the **Number of Threads** field is available; otherwise it will be  *(Number of MPI procs)* \* *(Memory per CPU)*.
+- **Job Time**: Fills Slurm's `--time` parameter.
+- **GPU Resources**: Only available in the GPU modules. Number (and optionally type) of GPUs to request for this job. If only an integer is supplied, will request any GPU. If `TYPE:NUM` is supplied (example: `a4000:4`), specific models of GPU will be requested. See the [**Resources**](../scheduler/resources.md) section for more information on available GPU types.
+
+=== "CPU Build"
+
+    <figure markdown>
+    ![Relion GUI running screen, CPU version](../img/relion_running_cpu.png)
+    <figcaption>The `relion/cpu` modules lack the GPU resources field. Note the submission script as well.</figcaption>
+    </figure>
+
+=== "GPU Build"
+
+    <figure markdown>
+    ![Relion GUI running screen, GPU version](../img/relion_running_gpu.png)
+    <figcaption>The `relion/gpu` module has an extra field for GPU resources. ALso note the differing submission script.</figcaption>
+    </figure>
+
+The default GUI fields serve their original purposes:
+
+- **Number of MPI procs**: This will fill the Slurm `--ntasks` parameter. These tasks may be distributed across multiple nodes, depending on the number of **Threads** requested. For GPU runs, this should be the number of GPUs **+ 1**.
+- **Number of Threads**: The will fill the Slurm `--cpus-per-task` parameter, which means it is the *number of threads per MPI proc*. Some job types do not expose this field, as they can only be run with a single-thread per MPI proc.
+- **Queue name**: The Slurm partition to submit to, filling the `--partition` parameter. More information on partitions can be found in the [**Queueing**](../scheduler/queues.md) section.
+- **Standard submission script**: The location of the Slurm job script template that will be used. This field will be filled with the appropriate template for the loaded Relion module by default, and should not be changed.*For advanced users only:* if you are familiar with Relion and want to further fine-tune your Slurm scripts, you can write your own based on the provided templates found in `/share/apps/spack/templates/hpccf/franklin` or [in our spack GitHub repo](https://github.com/ucdavis/spack-ucdavis/tree/main/templates/hpccf/franklin).
+- **Minimum dedicated cores per node**: Unused on our system.
+
 ### Switching Between Relion Modules: relion-helper
 
 ### Module Variants
